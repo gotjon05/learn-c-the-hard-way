@@ -1,6 +1,6 @@
-# CFLAGS=-Wall -g
+CFLAGS=-Wall -g
 
-# all: ex1 ex3 ex4 ex7
+all: ex1
 
-# clean:
-# 	rm -rf ex1 ex3 ex4 ex7 *.dSYM
+clean:
+	rm -rf ex1 *.dSYM
