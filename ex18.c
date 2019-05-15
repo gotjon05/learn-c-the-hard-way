@@ -82,13 +82,16 @@ void test_sorting(int *numbers, int count, compare_cb cmp)
   printf("\n");
 
   free(sorted);
+}
 
-  // unsigned char *data = (unsigned char *)cmp;
+void dump(compare_cb cmp)
+{
+  unsigned char *data = (unsigned char *)cmp;
 
-  // for (i = 0; i < 25; i++) {
-  //   printf("%02x:", data[i]);
-  // }
-  // printf("\n");
+  for (int i = 0; i < 25; i++) {
+    printf("%02x:", data[i]);
+  }
+  printf("\n");
 }
 
 int main(int argc, char *argv[])
@@ -112,6 +115,11 @@ int main(int argc, char *argv[])
   test_sorting(numbers, count, strange_order);
 
   free(numbers);
+
+  printf("SORTED: ");
+  dump(sorted_order);
+  printf("REVERSE: ");
+  dump(reverse_order);
 
   return 0;
 }
