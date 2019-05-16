@@ -87,15 +87,29 @@ void test_sorting(int *numbers, int count, compare_cb cmp)
 
 void dump(compare_cb cmp)
 {
+  check(cmp != NULL, "Invalid function ptr");
   unsigned char *data = (unsigned char *)cmp;
 
-  // for (int i = 0; i < 25; i++) {
-  //   printf("%02x:", data[i]);
-  // }
-  // printf("\n");
   for (int i = 0; i < 25; i++) {
+    printf("%02x:", data[i]);
+  }
+  printf("\n");
+  return;
+
+error:
+  printf("\n");
+}
+
+void destroy(compare_cb cmp)
+{
+  unsigned char *data = (unsigned char *)cmp;
+  debug("data is %p:%s", data, data);
+
+  for (int i = 0; i < 1; i++) {
+    debug("assign %d to data at %d", i, i);
     data[i] = i;
   }
+  debug("exited loop"); // this is never reached
 }
 
 int main(int argc, char *argv[])
@@ -122,8 +136,14 @@ int main(int argc, char *argv[])
 
   printf("SORTED: ");
   dump(sorted_order);
+
+  // debug("calling destroy with %p", sorted_order);
+  // destroy(sorted_order);
+
   printf("REVERSE: ");
   dump(reverse_order);
+
+  dump(NULL);
 
   return 0;
 }
