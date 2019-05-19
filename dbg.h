@@ -5,6 +5,11 @@
 #include <errno.h>
 #include <string.h>
 
+#define KRED "\x1B[31m"
+#define KGRN "\x1B[32m"
+#define KYEL "\x1B[33m"
+#define KNRM "\033[0m"
+
 #ifdef NDEBUG
 #define debug(M, ...)
 #else
@@ -15,14 +20,14 @@
 #define clean_errno() (errno == 0 ? "None" : strerror(errno))
 
 #define log_err(M, ...) fprintf(stderr, \
-  "[ERROR] (%s:%d: errno: %s) " M "\n", __FILE__, __LINE__, \
+  KRED "[ERROR]" KNRM " (%s:%d: errno: %s) " M "\n", __FILE__, __LINE__, \
   clean_errno(), ##__VA_ARGS__)
 
 #define log_warn(M, ...) fprintf(stderr, \
-  "[WARN] (%s:%d: errno: %s) " M "\n", \
+  KYEL "[WARN]" KNRM " (%s:%d: errno: %s) " M "\n", \
   __FILE__, __LINE__, clean_errno(), ##__VA_ARGS__)
 
-#define log_info(M, ...) fprintf(stderr, "[INFO] (%s:%d) " M "\n", \
+#define log_info(M, ...) fprintf(stderr, KGRN "[INFO]" KNRM " (%s:%d) " M "\n", \
   __FILE__, __LINE__, ##__VA_ARGS__)
 
 #define check(A, M, ...) if(!(A)) { \
