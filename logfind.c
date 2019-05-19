@@ -28,7 +28,7 @@ int read_file(char **words, int words_len, char *filename, char mode)
       if (strstr(buffer, words[i])) {
         // printf("Line contains the word \"%s\": TRUE\n", words[i]);
         if (mode == 'o') {
-          log_info("%s: AT LEAST ONE MATCH FOUND: %s", filename, words[i]);
+          log_info("%s: " KYEL "AT LEAST ONE MATCH FOUND:" KGRN " %s" KNRM, filename, words[i]);
 
           fclose(file);
           return 0;
@@ -48,9 +48,9 @@ int read_file(char **words, int words_len, char *filename, char mode)
   //   printf("Word: %s, Number of times found: %d\n", words[i], count[i]);
   // }
   if(num_matches == words_len) {
-    log_info("%s: FOUND ALL WORDS", filename);
+    log_info("%s: " KGRN "FOUND ALL WORDS" KNRM, filename);
   } else {
-    log_info("%s: NO MATCHES FOUND", filename);
+    log_info("%s: " KRED "NO MATCHES FOUND" KNRM, filename);
   }
 
   fclose(file);
@@ -80,7 +80,7 @@ int main(int argc, char *argv[])
           mode = 'o';
           break;
         default:
-          sentinel("Invalid Otion!");
+          sentinel("Invalid Option!");
       }
 
       words++;
