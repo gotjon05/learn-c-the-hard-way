@@ -1,4 +1,4 @@
-CPPFLAGS=-DNDEBUG
+# CPPFLAGS=-DNDEBUG
 CFLAGS=-Wall -g
 
 all: logfind
