@@ -28,7 +28,7 @@ int read_file(char **words, int words_len, char *filename, char mode)
       if (strstr(buffer, words[i])) {
         // printf("Line contains the word \"%s\": TRUE\n", words[i]);
         if (mode == 'o') {
-          log_info("%s: " KYEL "AT LEAST ONE MATCH FOUND:" KGRN " %s" KNRM, filename, words[i]);
+          log_info("%s: " KYEL "AT LEAST ONE MATCH FOUND:" KNRM " %s", filename, words[i]);
 
           fclose(file);
           return 0;
@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
       check(i < 2 && argv[i][2] == '\0', "FATAL: Invalid Option Format!");
       switch (argv[i][1]) {
         case 'o':
-          log_info("USING OR LOGIC");
+          debug("USING OR LOGIC");
           mode = 'o';
           break;
         default:
