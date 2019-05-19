@@ -3,7 +3,7 @@
 
 #define MAX_LEN 100
 
-int read_file(char **words, int words_len, char *filename)
+int read_file(char **words, int words_len, char *filename, char mode)
 {
   char buffer[MAX_LEN];
   int count[words_len];
@@ -24,8 +24,11 @@ int read_file(char **words, int words_len, char *filename)
       debug("Word %d: %s", i, words[i]);
       if (count[i]) continue;
       if (strstr(buffer, words[i])) {
-        printf("\tLine contains the word \"%s\": TRUE\n", words[i]);
-        debug("AT LEAST ONE MATCH FOUND");
+        printf("Line contains the word \"%s\": TRUE\n", words[i]);
+        if (mode == 'o') {
+          log_info("AT LEAST ONE MATCH FOUND");
+          return 1;
+        }
         count[i]++;
         num_matches++;
       }
@@ -56,8 +59,30 @@ error:
 int main(int argc, char *argv[])
 {
   check(argc > 1, "USAGE: logfind [-o] <args>");
+  char *filename = "./log/names.log";
+  char **words = argv + 1;
+  int word_count = argc - 1;
+  char mode = '\0';
 
-  int rc = read_file(argv+1, argc-1, "./log/names.log");
+  // check if optional argument passed in
+  for (int i = 1; i < argc; i++) {
+    if (argv[i][0] == '-') {
+      check(i < 2, "FATAL: Options must come first in list of arguments!");
+      switch (argv[i][1]) {
+        case 'o':
+          log_info("USING OR LOGIC");
+          mode = 'o';
+          break;
+        default:
+          sentinel("Invalid Argument!");
+      }
+
+      words++;
+      word_count--;
+    }
+  }
+
+  int rc = read_file(words, word_count, filename, mode);
   check(rc >= 0, "FATAL ERROR");
 
   return 0;
