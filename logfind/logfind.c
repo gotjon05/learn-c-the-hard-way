@@ -6,22 +6,41 @@
 
 char **get_file_list()
 {
+  FILE *file;
+  char buffer[MAX_LEN];
   glob_t result;
+
+  file = fopen("./.logfind", "r");
+  check(file, "Cannot locate .logfind");
+
+  // Get the list of allowed file types
+  log_info("Reading log files ...");
+  log_info("-----");
+  while (fgets(buffer, MAX_LEN, file) != NULL) {
+    // allow comments and line breaks
+    if (buffer[0] == '#' || buffer[0] == '\n') continue;
+
+    // Chomp newline off the buffer string
+    int len = strlen(buffer);
+    if (buffer[len-1] == '\n') buffer[len-1] = 0;
+
+    // Get the list of files
+    int rc = glob(buffer, GLOB_ERR && GLOB_APPEND, NULL, &result);
+    check(rc != GLOB_NOMATCH, "No log files found: %s", buffer);
+  }
+
   int i = 0;
-
-  // Get the list of files
-  int rc = glob("./log/*.log", GLOB_ERR, NULL, &result);
-  check(rc != GLOB_NOMATCH, "No log files found!");
-
   while (result.gl_pathv[i]) {
     log_info("%s", result.gl_pathv[i]);
     i++;
   }
 
   // Return the list of files
+  fclose(file);
   return result.gl_pathv;
 
 error:
+  if (file) fclose(file);
   return NULL;
 }
 
@@ -34,13 +53,13 @@ int read_file(char **words, int words_len, char *filename, char mode)
   // initialuze the count array
   for (int i = 0; i < words_len; i++) count[i] = 0;
 
-  debug("-----");
-  debug("Opening file \"%s\" ...", filename);
+  log_info("-----");
+  log_info("Opening file \"%s\" ...", filename);
   FILE *file = fopen(filename, "r");
   check(file, "Failed to open log file!");
 
   debug("Number of words to check: %d", words_len);
-  debug("-----");
+  log_info("-----");
   while (fgets(buffer, MAX_LEN, file) != NULL) {
     // printf("\n");
     // printf("Line in file %s: %s", filename, buffer);
