@@ -10,7 +10,7 @@ char **get_file_list()
   int i = 0;
 
   // Get the list of files
-  int rc = glob("./log/*.log", GLOB_NOCHECK, NULL, &result);
+  int rc = glob("./log/*.log", GLOB_ERR, NULL, &result);
   check(rc != GLOB_NOMATCH, "No log files found!");
 
   while (result.gl_pathv[i]) {
@@ -87,6 +87,7 @@ int main(int argc, char *argv[])
 {
   check(argc > 1, "USAGE: logfind [-o] [words]");
   char **filenames = get_file_list();
+  check(filenames != NULL, KRED "FATAL: " KNRM "Could not read logfiles.");
   char **words = argv + 1;
   int word_count = argc - 1;
   char mode = '\0';
